@@ -115,6 +115,19 @@ class AnimalControllerTest {
         verify(fileService, times(1)).readXmlFile(file);
     }
 
+    @Test
+    public void shouldNotAddAnimalsFromFile() throws Exception {
+        byte[] content = Files.readAllBytes(Path.of("src/test/resources/animals.txt"));
+
+        MockMultipartFile file = new MockMultipartFile("file", "animals.txt", "text/txt", content);
+
+        mockMvc.perform(multipart("/api/files/uploads")
+                        .file(file)
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isUnsupportedMediaType());
+        
+    }
+
 
 
 }
